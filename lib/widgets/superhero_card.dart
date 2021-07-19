@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 
 class SuperheroCard extends StatelessWidget {
-  final String name;
-  final String realName;
-  final String imageUrl;
+  final SuperheroInfo superheroInfo;
   final VoidCallback onTap;
 
-  const SuperheroCard({
-    Key? key,
-    required this.name,
-    required this.realName,
-    required this.imageUrl,
-    required this.onTap
-  }) : super(key: key);
+  const SuperheroCard(
+      {Key? key, required this.superheroInfo, required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +17,15 @@ class SuperheroCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 70,
-        color: SuperheroesColors.card_background,
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: SuperheroesColors.indigo,
+        ),
         child: Row(
           children: <Widget>[
             Image.network(
-              imageUrl,
+              superheroInfo.imageUrl,
               width: 70,
               height: 70,
               fit: BoxFit.cover,
@@ -38,7 +37,7 @@ class SuperheroCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    name.toUpperCase(),
+                    superheroInfo.name.toUpperCase(),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -46,7 +45,7 @@ class SuperheroCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    realName,
+                    superheroInfo.realName,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
