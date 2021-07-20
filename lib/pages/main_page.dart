@@ -42,8 +42,6 @@ class _MainPageState extends State<MainPage> {
 class _MainPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final MainBloc bloc = Provider.of<MainBloc>(context, listen: false);
-
     return Stack(
       children: <Widget>[
         MainPageStateWidget(),
@@ -131,6 +129,7 @@ class SearchWidget extends StatefulWidget {
 
 class _SearchWidgetState extends State<SearchWidget> {
   final TextEditingController controller = TextEditingController();
+  bool isNotEmpty = false;
 
   @override
   void initState() {
@@ -138,7 +137,12 @@ class _SearchWidgetState extends State<SearchWidget> {
 
     SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
       final MainBloc bloc = Provider.of<MainBloc>(context, listen: false);
-      controller.addListener(() => bloc.updateText(controller.text));
+      controller.addListener(() {
+        bloc.updateText(controller.text);
+        setState(() {
+          isNotEmpty = controller.text != "";
+        });
+      });
     });
   }
 
@@ -176,7 +180,8 @@ class _SearchWidgetState extends State<SearchWidget> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: Colors.white24,
+            color: isNotEmpty ? Colors.white : Colors.white24,
+            width: isNotEmpty ? 2 : 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
